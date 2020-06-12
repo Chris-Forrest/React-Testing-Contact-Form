@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 
 test("renders App without crashing", () => {
@@ -36,5 +36,18 @@ test('form can be filled in and submitted', () => {
 
   const submitButton = getByTestId(/submit/i);
   fireEvent.click(submitButton);
+
+})
+
+/*******test if you get error messages *****************/
+test('make sure the error messages are shown', async() => {
+  const{ getByTestId, getByPlaceholderText,queryByText } = render(<App />);
+  const firstNameInput = getByPlaceholderText(/edd/i);
+
+  fireEvent.change(firstNameInput , {
+    target: { name: 'firstName', value: 'Chris'}
+  });
+
+  await waitFor(() => expect(queryByText(/looks like there was an error/i)))
 
 })
